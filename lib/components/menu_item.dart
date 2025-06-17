@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_manager/utils/theme.dart';
 
 class Menu extends StatefulWidget {
   Text title;
@@ -13,22 +14,41 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [widget.title, for (var item in widget.items) item],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: widget.title,
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Container(
+            height: 1,
+            margin: EdgeInsets.symmetric(vertical: 5),
+            decoration: BoxDecoration(color: Colors.grey.shade300),
+          ),
+        ),
+        for (var item in widget.items) item,
+      ],
     );
   }
 }
 
 class MenuItem extends StatefulWidget {
-  Icon icon;
-  Text text;
+  final Icon icon;
+  final Text text;
+  final Function() onTap;
+  final bool isSelected;
 
-  MenuItem({super.key, required this.icon, required this.text});
+  MenuItem({
+    super.key,
+    required this.icon,
+    required this.text,
+    required this.onTap,
+    required this.isSelected,
+  });
 
   @override
   State<MenuItem> createState() => _MenuItemState();
@@ -41,15 +61,21 @@ class _MenuItemState extends State<MenuItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        setState(() {
-          action = 1;
-        });
-      },
-      child: Container(
-        decoration: BoxDecoration(color: _getItemColor()),
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: Row(children: [widget.icon, widget.text]),
+      onTap: widget.onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            color:
+                widget.isSelected
+                    ? Colors.grey.shade300
+                    : SystemColors.backgroundColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 5),
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: Row(children: [widget.icon, SizedBox(width: 3), widget.text]),
+        ),
       ),
     );
   }

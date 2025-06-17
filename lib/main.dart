@@ -8,7 +8,7 @@ void main() async {
   await windowManager.ensureInitialized();
   WindowOptions windowOptions = WindowOptions(
     minimumSize: Size(800,600),
-    size: Size(1000,800),
+    size: Size(1600,1000),
     center: true,
     title: "时间管理大师",
     titleBarStyle: TitleBarStyle.hidden,
