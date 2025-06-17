@@ -11,6 +11,7 @@ void main() async {
     size: Size(1000,800),
     center: true,
     title: "时间管理大师",
+    titleBarStyle: TitleBarStyle.hidden,
   );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();

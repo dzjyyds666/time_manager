@@ -1,6 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:time_manager/utils/theme.dart';
+
+import '../components/menu_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,9 +30,32 @@ class HomeState extends State<HomePage> {
           body: Row(
             children: [
               Container(
-                decoration: BoxDecoration(color: Colors.blue),
+                decoration: BoxDecoration(color: SystemColors.primary),
                 width: _leftWidthRatio * width,
                 height: height,
+                child: Column(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: _leftWidthRatio * width,
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: Row(children: []),
+                    ),
+                    Menu(
+                      title: Text("随心记"),
+                      items: [
+                        MenuItem(
+                          icon: Icon(Icons.access_alarm),
+                          text: Text("计时器"),
+                        ),
+                        MenuItem(
+                          icon: Icon(Icons.access_alarm),
+                          text: Text("倒计时"),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
@@ -51,7 +75,7 @@ class HomeState extends State<HomePage> {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(color: Colors.red),
+                decoration: BoxDecoration(color: SystemColors.primary),
                 width: width - (width * _leftWidthRatio) - 4,
                 height: height,
               ),
