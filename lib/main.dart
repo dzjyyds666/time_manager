@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_manager/page/home.dart';
+import 'package:time_manager/widget/breathing_circle.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -7,8 +8,8 @@ void main() async {
 
   await windowManager.ensureInitialized();
   WindowOptions windowOptions = WindowOptions(
-    minimumSize: Size(800,600),
-    size: Size(1600,1000),
+    minimumSize: Size(800, 600),
+    size: Size(1600, 1000),
     center: true,
     title: "时间管理大师",
     titleBarStyle: TitleBarStyle.hidden,
@@ -32,6 +33,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
       home: HomePage(),
+      // home: BreathingCircle(
+      //   dotCount: 12,
+      //   baseRadius: 6.0,
+      //   activeRadius: 10.0,
+      //   circleRadius: 80.0,
+      // ),
     );
   }
 }

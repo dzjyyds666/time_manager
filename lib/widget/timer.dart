@@ -29,7 +29,7 @@ class _TimerWidgetState extends State<TimerWidget> {
       children: [
         Container(
           width: widget.width * _leftWidthRatio,
-          decoration: BoxDecoration(color: Colors.red),
+          decoration: BoxDecoration(),
           child: Center(child: ClockWidget(width: widget.width * _leftWidthRatio * 0.5)),
         ),
         GestureDetector(
