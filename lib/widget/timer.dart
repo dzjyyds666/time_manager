@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:time_manager/widget/clock_widget.dart';
 
 // 计时器
 class TimerWidget extends StatefulWidget {
@@ -29,7 +30,7 @@ class _TimerWidgetState extends State<TimerWidget> {
         Container(
           width: widget.width * _leftWidthRatio,
           decoration: BoxDecoration(color: Colors.red),
-          child: Center(child: Text("计时")),
+          child: Center(child: ClockWidget(width: widget.width * _leftWidthRatio * 0.5)),
         ),
         GestureDetector(
           behavior: HitTestBehavior.translucent,
