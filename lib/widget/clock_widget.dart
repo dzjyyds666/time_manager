@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:time_manager/widget/breathing_circle.dart';
+import 'dart:async';
+import 'dart:ffi';
 
-import '../utils/common.dart';
-import '../utils/shared_preference.dart';
+import 'package:flutter/material.dart';
+import 'package:time_manager/utils/common.dart';
+import 'package:time_manager/widget/breathing_circle.dart';
 
 class ClockWidget extends StatefulWidget {
   final double width;
@@ -15,6 +16,8 @@ class ClockWidget extends StatefulWidget {
 
 class _ClockWidgetState extends State<ClockWidget> {
   ClockState _state = ClockState.stop;
+  int _count = 0;
+  Timer? _timer;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,7 @@ class _ClockWidgetState extends State<ClockWidget> {
                 circleRadius: widget.width / 2 - 10, //  注意减点 padding 避免溢出
               ),
             ),
-            Text("20:00:00", style: TextStyle(fontSize: widget.width * 0.1)),
+            Text(utils.timeFormat(_count), style: TextStyle(fontSize: widget.width * 0.1)),
           ],
         ),
         Row(
@@ -51,6 +54,22 @@ class _ClockWidgetState extends State<ClockWidget> {
         ),
       ],
     );
+  }
+
+  // 开始定时器
+  void _startTimer(){
+    _timer = Timer.periodic(Duration(seconds: 1), (_timer){
+        setState(() {
+          _count++;
+        });
+      });
+  }
+
+  // 暂停定时器
+  void _pauseTimer() {
+    if (_timer != null && _timer!.isActive) {
+      _timer!.cancel();
+    }
   }
 
   List<Widget> _getClickButton() {
@@ -69,6 +88,7 @@ class _ClockWidgetState extends State<ClockWidget> {
       setState(() {
         _state = ClockState.play;
       });
+      _startTimer();
     },
     child: Container(
       padding: EdgeInsets.all(20),
@@ -81,6 +101,7 @@ class _ClockWidgetState extends State<ClockWidget> {
       setState(() {
         _state = ClockState.pause;
       });
+      _pauseTimer();
     },
     child: Container(
       padding: EdgeInsets.all(20),
@@ -93,6 +114,7 @@ class _ClockWidgetState extends State<ClockWidget> {
       setState(() {
         _state = ClockState.stop;
       });
+      _pauseTimer();
     },
     child: Container(
       padding: EdgeInsets.all(20),
