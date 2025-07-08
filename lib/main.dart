@@ -33,12 +33,6 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
       home: HomePage(),
-      // home: BreathingCircle(
-      //   dotCount: 12,
-      //   baseRadius: 6.0,
-      //   activeRadius: 10.0,
-      //   circleRadius: 80.0,
-      // ),
     );
   }
 }

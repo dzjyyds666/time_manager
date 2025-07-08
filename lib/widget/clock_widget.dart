@@ -28,11 +28,18 @@ class _ClockWidgetState extends State<ClockWidget> {
           alignment: Alignment.center, //  整个 Stack 内容居中
           children: [
             Container(
-              width: widget.width,
-              height: widget.width,
+              width: widget.width + 20,
+              height: widget.width + 20,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
+                boxShadow: [BoxShadow(color: Colors.black, blurRadius: 10)],
+                border: Border(
+                  top: BorderSide(color: Colors.black, width: 2),
+                  bottom: BorderSide(color: Colors.black, width: 2),
+                  left: BorderSide(color: Colors.black, width: 2),
+                  right: BorderSide(color: Colors.black, width: 2),
+                ),
               ),
             ),
             SizedBox(
@@ -43,11 +50,17 @@ class _ClockWidgetState extends State<ClockWidget> {
                 baseRadius: widget.width * 0.02,
                 activeRadius: widget.width * 0.04,
                 circleRadius: widget.width / 2 - 10, //  注意减点 padding 避免溢出
+                isActive: _state == ClockState.play,
+                isReset: _state == ClockState.stop,
               ),
             ),
-            Text(utils.timeFormat(_count), style: TextStyle(fontSize: widget.width * 0.1)),
+            Text(
+              utils.timeFormat(_count),
+              style: TextStyle(fontSize: widget.width * 0.1),
+            ),
           ],
         ),
+        SizedBox(height: 10,),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [for (var item in _getClickButton()) item],
@@ -57,12 +70,12 @@ class _ClockWidgetState extends State<ClockWidget> {
   }
 
   // 开始定时器
-  void _startTimer(){
-    _timer = Timer.periodic(Duration(seconds: 1), (_timer){
-        setState(() {
-          _count++;
-        });
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (_timer) {
+      setState(() {
+        _count++;
       });
+    });
   }
 
   // 暂停定时器
@@ -91,8 +104,15 @@ class _ClockWidgetState extends State<ClockWidget> {
       _startTimer();
     },
     child: Container(
-      padding: EdgeInsets.all(20),
-      child: Icon(Icons.play_circle, size: 40),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.black),
+        color: Colors.white,
+        boxShadow: [BoxShadow(color: Colors.black, blurRadius: 10)],
+      ),
+      child: Icon(Icons.play_arrow, size: widget.width * 0.1),
     ),
   );
 
@@ -104,23 +124,62 @@ class _ClockWidgetState extends State<ClockWidget> {
       _pauseTimer();
     },
     child: Container(
-      padding: EdgeInsets.all(20),
-      child: Icon(Icons.pause_circle, size: 40),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.black),
+        color: Colors.white,
+        boxShadow: [BoxShadow(color: Colors.black, blurRadius: 10)],
+      ),
+      child: Icon(Icons.pause, size: widget.width * 0.1),
     ),
   );
 
   get stopButton => GestureDetector(
     onTap: () {
       setState(() {
-        _state = ClockState.stop;
+        _state = ClockState.pause;
       });
+      _showStopDialog();
       _pauseTimer();
     },
     child: Container(
-      padding: EdgeInsets.all(20),
-      child: Icon(Icons.stop_circle, size: 40),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.black),
+        color: Colors.white,
+        boxShadow: [BoxShadow(color: Colors.black, blurRadius: 10)],
+      ),
+      child: Icon(Icons.stop, size: widget.width * 0.1),
     ),
   );
+
+  // 弹出停止弹窗
+  void _showStopDialog() { 
+    showDialog(context: context, builder: (builder){
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text("停止计时"),
+        content: Text("是否停止本次计时呢？"),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.of(context).pop();
+          }, icon: Text('取消')),
+          IconButton(onPressed: (){
+            setState(() {
+              _state = ClockState.stop;
+              _count = 0;
+            });
+            // todo 记录本次数据到数据库
+            Navigator.of(context).pop();
+          }, icon: Text('确定'))
+        ],
+      );
+    });
+  }
 }
 
 enum ClockState { play, pause, stop }
